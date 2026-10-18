@@ -1,7 +1,9 @@
 #include "RealCPPhttp/req.hpp"
 #include "RealCPPhttp/tools.hpp"
+#include <cstddef>
 #include <iostream>
-#include <ostream>
+#include <map>
+// #include <ostream>
 #include <stdexcept>
 
 // Request from browser
@@ -28,17 +30,7 @@
 // User-Agent: curl/8.22.0
 // Accept: */*
 
-// struct Request{
-//   std::string 
-//   method,  [X] done 
-//   url_path,  [X] done
-//   HTTP_version, [X] done
-//   Host,  [X] done
-//   Agent, 
-//   Accept;  
-// };
-
-std::string parse_header(std::string req, std::string header);
+std::map<std::string, std::string> parse_headers(std::string req);
 
 Req_lib::Request Req_lib::parse_req(const std::string& request){
   Req_lib::Request new_request;
@@ -74,40 +66,53 @@ Req_lib::Request Req_lib::parse_req(const std::string& request){
 
   // ============ from here bellow call can be a function call to reduce code
 
-  new_request.Host = parse_header(request, "Host:");
-  new_request.Agent = parse_header(request, "User-Agent:");
-  new_request.Accept = parse_header(request, "Accept:");
-
-  std::cout << "Host: [" << new_request.Host << "]\n";
-  std::cout << "Agent: [" << new_request.Agent << "]\n";
-  std::cout << "Accept: [" << new_request.Accept << "]\n";
-
-  // ============
-
-  std::cout << "Request method: [" << new_request.method << "]\n";
+  // std::cout << "Request method: [" << new_request.method << "]\n";
   if(new_request.HTTP_version != "HTTP/1.1"){
     throw std::invalid_argument("Must be using HTTP version 1.1");
   }
 
-  std::cout << "Http version: [" << new_request.HTTP_version << "]\n";
-  std::cout << "Req path: [" << new_request.url_path << "]\n";
+  std::map<std::string, std::string> maps = parse_headers(request);
+  new_request.header_map = maps;
+  std::cout << "Request: \n" << request;
 
-  std::cout << "\nRequest: \n" << request << std::endl;
   return new_request;
 }
 
-// parse_header() is for parsing and finding individual header values for http requests
-std::string parse_header(std::string req, std::string header){
-  size_t start_range = req.find(' ', req.find(header));
-  if(start_range== std::string::npos) {return {};}
-  start_range++;
+// parse_headers is used for parsing the entire string of request appart from the first request line
+std::map<std::string, std::string> parse_headers(std::string req){
+  std::string seperator = "\r\n";
+  size_t first_line_end = req.find(seperator);
+  if(first_line_end == std::string::npos){
+    return {};
+  }
+  first_line_end += seperator.length();
 
-  size_t end_range = req.find("\r\n", start_range);
-  if(end_range == std::string::npos) {return {};}
-  return req.substr(start_range, end_range - start_range);
+  std::string subber = req.substr(first_line_end);
+
+  std::map<std::string, std::string> header_map;
+  std::string temp_req = subber;
+  temp_req.erase(temp_req.length() - seperator.length(), temp_req.length()); // just trim the last char
+  size_t pos;
+
+  while((pos = temp_req.find(seperator)) != std::string::npos){
+    std::string stringer = temp_req.substr(0, pos);
+
+    size_t splitter = stringer.find(':');
+    if(splitter == std::string::npos) {return {};}
+
+    std::string key = stringer.substr(0, splitter);
+
+    std::string val = stringer.substr(splitter+2, stringer.find(seperator));
+
+    // std::cout << "[" << key << "] " << "[" << val << "]\n";
+
+    header_map.insert({key, val});
+
+    temp_req.erase(0, pos + seperator.length());
+  }
+  
+  return header_map;
 }
-
-
 
 
 

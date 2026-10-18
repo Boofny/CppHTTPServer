@@ -1,5 +1,4 @@
 // dont know if this really affects me but the color of these includes are yellow on linux and the func definers like int are now purple also on linux
-#include <stdexcept>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <iostream>
@@ -66,7 +65,14 @@ int main (int argc, char *argv[]) {
 
       std::string resp = Resp::default_ok("your type is " + parsed_meth, "json");
 
-      request = Req_lib::parse_req(buffer);
+      Req_lib::Request request = Req_lib::parse_req(buffer);
+      std::cout << "Method: " << request.method << std::endl;
+      std::cout << "Http version: " << request.HTTP_version << std::endl;
+      std::cout << "Url Path: " << request.url_path << std::endl;
+
+      std::cout << "Host: " << request.header_map["Host"] << std::endl;
+      std::cout << "User-Agent: " << request.header_map["User-Agent"] << std::endl;
+      std::cout << "Accept: " << request.header_map["Accept"] << std::endl;
 
       send(clientSocket, resp.data(), resp.length(), 0);
     }else{
