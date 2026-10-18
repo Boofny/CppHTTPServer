@@ -33,10 +33,12 @@
 //   method,  [X] done 
 //   url_path,  [X] done
 //   HTTP_version, [X] done
-//   Host, 
+//   Host,  [X] done
 //   Agent, 
 //   Accept;  
 // };
+
+std::string parse_header(std::string req, std::string header);
 
 Req_lib::Request Req_lib::parse_req(const std::string& request){
   Req_lib::Request new_request;
@@ -48,9 +50,6 @@ Req_lib::Request Req_lib::parse_req(const std::string& request){
       break;
     }
   }
-
-  //NOTE: might want to replace return{}; with throwing error or something or handle it some other way since this 
-  //server is not ment to end all of a sudden
 
   size_t url_start_range = request.find(' ');
   if(url_start_range == std::string::npos) { return {};}
@@ -73,18 +72,15 @@ Req_lib::Request Req_lib::parse_req(const std::string& request){
 
   new_request.HTTP_version = request.substr(http_v_start, http_v_end - http_v_start);
 
-  // ============
+  // ============ from here bellow call can be a function call to reduce code
 
-  size_t host_start_rage = request.find(' ', request.find("Host:")); // wowo
-  if(host_start_rage == std::string::npos) {return {};}
-  host_start_rage++;
+  new_request.Host = parse_header(request, "Host:");
+  new_request.Agent = parse_header(request, "User-Agent:");
+  new_request.Accept = parse_header(request, "Accept:");
 
-  size_t host_end_rage = request.find("\r\n", host_start_rage); // wowo
-  if(host_end_rage == std::string::npos) {return {};}
-
-  new_request.Host = request.substr(host_start_rage, host_end_rage - host_start_rage);
   std::cout << "Host: [" << new_request.Host << "]\n";
-
+  std::cout << "Agent: [" << new_request.Agent << "]\n";
+  std::cout << "Accept: [" << new_request.Accept << "]\n";
 
   // ============
 
@@ -98,6 +94,17 @@ Req_lib::Request Req_lib::parse_req(const std::string& request){
 
   std::cout << "\nRequest: \n" << request << std::endl;
   return new_request;
+}
+
+// parse_header() is for parsing and finding individual header values for http requests
+std::string parse_header(std::string req, std::string header){
+  size_t start_range = req.find(' ', req.find(header));
+  if(start_range== std::string::npos) {return {};}
+  start_range++;
+
+  size_t end_range = req.find("\r\n", start_range);
+  if(end_range == std::string::npos) {return {};}
+  return req.substr(start_range, end_range - start_range);
 }
 
 
