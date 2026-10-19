@@ -74,6 +74,10 @@ int main (int argc, char *argv[]) {
       std::cout << "User-Agent: " << request.header_map["User-Agent"] << std::endl;
       std::cout << "Accept: " << request.header_map["Accept"] << std::endl;
 
+      if (Tools::map_containes(request.header_map, "Origin")){
+        std::cout << "Origin: " << request.header_map["Origin"] << std::endl;
+      }
+
       send(clientSocket, resp.data(), resp.length(), 0);
     }else{
       std::cerr << "idk somthing wrong I think\n";

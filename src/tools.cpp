@@ -6,6 +6,10 @@
 #include <string>
 #include "RealCPPhttp/tools.hpp"
 #include <json/json.h>
+#include <map>
+
+// bool Tools::map_containes(std::map<std::string, std::string> header_map, std::string find_key);
+bool Tools::map_containes(const std::map<std::string, std::string>& header_map, std::string find_key);
 
 // valid_port is used to to validate a port from its value and length
 static bool valid_port(const std::string &in){
@@ -126,5 +130,7 @@ std::string Tools::parse_recv_meth(std::string& in) {
 
 // should make something like breakdown resp and req into structs
 
-
+bool Tools::map_containes(const std::map<std::string, std::string>& header_map, std::string find_key){
+  return header_map.count(find_key) > 0;
+}
 

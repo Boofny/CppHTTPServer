@@ -43,7 +43,10 @@ std::string Resp::default_ok(const std::string& msg, const std::string& cont_typ
   resp += "Content-Type: " + meth_type + "\r\n";
 
   resp += "Content-Length: " + std::to_string(return_msg.size()) + "\r\n";
-  resp += "Connection: close\r\n";
+  resp += "Connection: close\r\n"; // NOTE: this does work for now but will need to actually make a router in order to do this propely
+  resp += "Access-Control-Allow-Origin: http://localhost:5500\r\r";
+  resp += "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS\r\n"; 
+  resp += "Access-Control-Allow-Headers: Content-Type\r\n";
   resp += "\r\n";
   resp += return_msg;
 
