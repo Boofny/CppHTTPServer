@@ -10,3 +10,4 @@
 - [X] 4. need to make the modules for resp and req different from the tools
 - [X] 5. clean up code inside of req.cpp its damn ugly
 - [ ] 6. now need to work on getting specific paths to return things other than just a global path and return status
+- [ ] 7. need to make a router class for better usage
