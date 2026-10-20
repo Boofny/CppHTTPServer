@@ -7,8 +7,11 @@
 #include "RealCPPhttp/req.hpp"
 #include "RealCPPhttp/resp.hpp"
 #include "RealCPPhttp/tools.hpp"
+#include "RealCPPhttp/router.hpp"
 
 int main (int argc, char *argv[]) {
+
+  Router::speak();
 
   int portNum = Tools::parse_args(argc, argv);
 
