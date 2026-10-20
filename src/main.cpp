@@ -4,14 +4,13 @@
 #include <iostream>
 #include <unistd.h>
 #include <string>
-#include "RealCPPhttp/req.hpp"
-#include "RealCPPhttp/resp.hpp"
-#include "RealCPPhttp/tools.hpp"
-#include "RealCPPhttp/router.hpp"
+#include "CppHTTPServer/req.hpp"
+#include "CppHTTPServer/resp.hpp"
+#include "CppHTTPServer/tools.hpp"
+#include "CppHTTPServer/router.hpp"
 
 int main (int argc, char *argv[]) {
-
-  Router::speak();
+  router_greet();
 
   int portNum = Tools::parse_args(argc, argv);
 

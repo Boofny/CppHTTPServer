@@ -1,6 +1,6 @@
-#include <RealCPPhttp/router.hpp>
+#include <CppHTTPServer/router.hpp>
 #include <iostream>
 
-void Router::speak(){
-  std::cout << "Router\n";
+void router_greet(){
+ std::cout << "hello from router.hpp"<< std::endl;
 }
