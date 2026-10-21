@@ -10,8 +10,13 @@
 #include "CppHTTPServer/router.hpp"
 
 int main (int argc, char *argv[]) {
-  router_greet();
+  Router new_router;
 
+  new_router.cors_ = true;
+  new_router.logging_ = true;
+
+  new_router.Start("2929");
+  
   int portNum = Tools::parse_args(argc, argv);
 
   if (portNum == -1){
