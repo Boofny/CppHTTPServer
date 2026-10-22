@@ -7,14 +7,9 @@
 #include "CppHTTPServer/req.hpp"
 #include "CppHTTPServer/resp.hpp"
 #include "CppHTTPServer/tools.hpp"
-#include "CppHTTPServer/router.hpp"
 
 int main (int argc, char *argv[]) {
-  CppHTTP new_router = Router::New();
 
-  new_router.Start("8080");
-  
-  std::cout << new_router.mode_ << std::endl;
   int portNum = Tools::parse_args(argc, argv);
 
   if (portNum == -1){

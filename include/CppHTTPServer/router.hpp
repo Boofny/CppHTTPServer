@@ -1,24 +1,18 @@
 #pragma once
+#include <functional>
 #include <string>
+#include <unordered_map>
+#include "CppHTTPServer/req.hpp"
 
+using Handler = std::function<std::string(const Req_lib::Request&)>;
 
-class CppHTTP{
+class Router{
   public:
-    CppHTTP(std::string mode = "default", bool cors = false, bool logging = false);
-    ~CppHTTP();
-
-    std::string mode_;
-    bool cors_;
-    bool logging_;
-
-    void Start(const std::string& port = "8080");
-
-    void Get(std::string path);
+    void get(const std::string& path, Handler h);
+    std::string dispatch(const Req_lib::Request& req) const;
 
   private:
-    std::string port;
-};
+    std::unordered_map<std::string, std::unordered_map
+      <std::string, Handler>> routes_;
 
-namespace Router{ 
-  CppHTTP New();
-}
+};
