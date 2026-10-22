@@ -1,12 +1,11 @@
 #pragma once
 #include <string>
 
-namespace Router_lib{ }
 
-class Router{
+class CppHTTP{
   public:
-    Router(std::string mode = "default", bool cors = false, bool logging = false);
-    ~Router();
+    CppHTTP(std::string mode = "default", bool cors = false, bool logging = false);
+    ~CppHTTP();
 
     std::string mode_;
     bool cors_;
@@ -20,3 +19,6 @@ class Router{
     std::string port;
 };
 
+namespace Router{ 
+  CppHTTP New();
+}
