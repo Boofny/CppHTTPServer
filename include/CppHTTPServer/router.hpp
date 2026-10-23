@@ -16,6 +16,27 @@ class Router{
 
   private:
     std::unordered_map<std::string, std::string> get_routes_; // using this just for now
-    std::unordered_map<std::string, std::unordered_map
-      <std::string, Handler>> routes_;
+
+    std::unordered_map<std::string, std::unordered_map <std::string, Handler>> routes_; // thi creates a map of maps best for different methods
 };
+
+// example from golive
+// package main
+//
+// import (
+// 	"net/http"
+// 	"github.com/Boofny/golive"
+// 	"github.com/Boofny/golive/middleware"
+// )
+//
+// func main() {
+// 	e := golive.Launch()
+//
+// 	e.Chain(middleware.CORS())
+//
+// 	e.GET("/ping", func(c *golive.Context)error{
+// 		return c.SendSTRING(http.StatusOK, "pong") //send out your data
+// 	})
+//
+// 	e.StartServer(":8080")
+// }
