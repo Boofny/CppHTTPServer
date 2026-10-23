@@ -9,10 +9,13 @@ using Handler = std::function<std::string(const Req_lib::Request&)>;
 class Router{
   public:
     void get(const std::string& path, Handler h);
+
     std::string dispatch(const Req_lib::Request& req) const;
 
+    void StartServer(const std::string& path = "8080");
+
   private:
+    std::unordered_map<std::string, std::string> get_routes_; // using this just for now
     std::unordered_map<std::string, std::unordered_map
       <std::string, Handler>> routes_;
-
 };

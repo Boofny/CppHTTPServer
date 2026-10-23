@@ -6,9 +6,11 @@
 #include <string>
 #include "CppHTTPServer/req.hpp"
 #include "CppHTTPServer/resp.hpp"
+#include "CppHTTPServer/router.hpp"
 #include "CppHTTPServer/tools.hpp"
 
 int main (int argc, char *argv[]) {
+  Router router;
 
   int portNum = Tools::parse_args(argc, argv);
 
