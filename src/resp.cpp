@@ -16,8 +16,6 @@ static std::string create_json_default_resp(const std::string& msg);
 // default_ok is just the default_ok resp with a custom message in text/plain NOT json
 std::string Resp::default_ok(const std::string& msg, const std::string& cont_type) {
 
-  // std::cout << "using type " + cont_type << std::endl;
-
   std::string resp;
   std::string return_msg;
   resp.reserve(128 + msg.size());
@@ -44,7 +42,7 @@ std::string Resp::default_ok(const std::string& msg, const std::string& cont_typ
 
   resp += "Content-Length: " + std::to_string(return_msg.size()) + "\r\n";
   resp += "Connection: close\r\n"; // NOTE: this does work for now but will need to actually make a router in order to do this propely
-  resp += "Access-Control-Allow-Origin: http://localhost:5500\r\r";
+  resp += "Access-Control-Allow-Origin: http://localhost:5500\r\n";
   resp += "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS\r\n"; 
   resp += "Access-Control-Allow-Headers: Content-Type\r\n";
   resp += "\r\n";
