@@ -7,6 +7,7 @@
 #include "CppHTTPServer/tools.hpp"
 #include <json/json.h>
 #include <map>
+#include <string_view>
 
 // bool Tools::map_containes(std::map<std::string, std::string> header_map, std::string find_key);
 bool Tools::map_containes(const std::map<std::string, std::string>& header_map, std::string find_key);
@@ -91,7 +92,7 @@ int Tools::parse_args(int argc, char *argv[]){
 }
 
 // pass by reference the input brother
-std::string Tools::parse_recv_meth(std::string& in) {
+std::string Tools::parse_recv_meth(std::string_view in) {
 
   // this is what is sent from a normal get req
   // GET / HTTP/1.1

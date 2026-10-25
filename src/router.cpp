@@ -1,15 +1,10 @@
 #include "CppHTTPServer/router.hpp"
 #include "CppHTTPServer/req.hpp"
-#include <iostream>
-#include <stdexcept>
-#include <unordered_map>
-#include <utility>
 #include "CppHTTPServer/resp.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <iostream>
 #include <unistd.h>
-#include <string>
 #include "CppHTTPServer/tools.hpp"
 
 void Router::get(const std::string& path, Handler h){
@@ -75,16 +70,21 @@ bool Router::StartServer(const std::string& port){
   // have to keep in mind at some point memory will have to be alterd from here
   while(true){
     int clientSocket = accept(serverSocker, nullptr, nullptr);
+    if(clientSocket < 0){
+      std::cerr << "Error in client socket\n";
+      return 1;
+    }
 
-    char buffer[1024] = {0};
+    char buffer[2048] = {0};
     size_t i = recv(clientSocket, buffer, sizeof(buffer), 0);
 
     if(i > 0){
       std::cout << "\n";
-      // std::cout << "Recived message: \n" << buffer << "\n";
-      std::string s1 = buffer;
+      std::cout << "Recived message: \n" << buffer << "\n";
+      // std::string s1 = buffer;
+      std::string_view raw(buffer, i);
 
-      std::string parsed_meth = Tools::parse_recv_meth(s1);
+      std::string parsed_meth = Tools::parse_recv_meth(raw);
 
       if(parsed_meth == "NULL"){
         std::cerr << "Invalid method\n";

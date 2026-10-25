@@ -3,11 +3,8 @@
 // #include "CppHTTPServer/req.hpp"
 // #include "CppHTTPServer/resp.hpp"
 #include <cstdint>
-#include <sys/socket.h>
 #include <netinet/in.h>
 #include <iostream>
-#include <unistd.h>
-#include "CppHTTPServer/req.hpp"
 #include "CppHTTPServer/resp.hpp"
 #include "CppHTTPServer/router.hpp"
 #include "CppHTTPServer/tools.hpp"
@@ -26,10 +23,11 @@ int main (int argc, char *argv[]) {
   }
 
   router.get("/ping", [](const Req_lib::Request& req) {
+    std::cout << req.raw_data << std::endl;
     return Resp::default_ok("ok", "text");
   });
 
-  std::uint8_t good = router.StartServer("4040");
+  std::uint8_t good = router.StartServer();
   return good;
 
   /* =================== tcp code starts here ========================== */

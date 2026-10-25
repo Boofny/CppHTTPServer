@@ -43,6 +43,9 @@ Req_lib::Request Req_lib::parse_req(const std::string& request){
     }
   }
 
+  new_request.raw_data = request.data();
+  new_request.length = request.length();
+
   size_t url_start_range = request.find(' ');
   if(url_start_range == std::string::npos) { return {};}
   url_start_range++;
