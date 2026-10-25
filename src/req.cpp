@@ -5,6 +5,7 @@
 #include <map>
 // #include <ostream>
 #include <stdexcept>
+#include <string>
 
 // Request from browser
 // GET /ping HTTP/1.1
