@@ -1,7 +1,4 @@
 // dont know if this really affects me but the color of these includes are yellow on linux and the func definers like int are now purple also on linux
-// #include <string>
-// #include "CppHTTPServer/req.hpp"
-// #include "CppHTTPServer/resp.hpp"
 #include <cstdint>
 #include <netinet/in.h>
 #include <iostream>
