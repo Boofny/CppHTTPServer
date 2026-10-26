@@ -19,18 +19,18 @@ void Router::get(const std::string& path, Handler h){
   routes_["GET"][path] = std::move(h);
 }
 
-// dont actually know what this is for 
+// TODO: i under stand the method to the madness here now but will need to work on what is being retured in router.cpp StartServer
 std::string Router::dispatch(const Req_lib::Request& req) const {
   auto m = routes_.find(req.method);
-  if (m == routes_.end()) return Resp::not_found();
+  if (m == routes_.end()) return Resp::default_error("Error broe", 400);
 
   auto h = m->second.find(req.url_path);
-  if (h == m->second.end()) return Resp::not_found();
+  if (h == m->second.end()) return Resp::default_error("Error", 400);
 
   return h->second(req);
 }
 
-//TODO: ok so the order this needs to work is to check the map for the path of the request from the routers req map then follow the handler given for the http get request
+//ok so the order this needs to work is to check the map for the path of the request from the routers req map then follow the handler given for the http get request
 bool Router::StartServer(const std::string& port){
   //NOTE one day will have to handle shutdowns as this thing grows
   int portNum = default_port;
@@ -72,8 +72,6 @@ bool Router::StartServer(const std::string& port){
 
   listen(serverSocker, 5);
 
-  Req_lib::Request request;
-
   // have to keep in mind at some point memory will have to be alterd from here
   while(true){
     int clientSocket = accept(serverSocker, nullptr, nullptr);
@@ -86,9 +84,6 @@ bool Router::StartServer(const std::string& port){
     size_t i = recv(clientSocket, buffer, sizeof(buffer), 0);
 
     if(i > 0){
-      std::cout << "\n";
-      std::cout << "Recived message: \n" << buffer << "\n";
-      // std::string s1 = buffer;
       std::string_view raw(buffer, i);
 
       std::string parsed_meth = Tools::parse_recv_meth(raw);
@@ -100,7 +95,18 @@ bool Router::StartServer(const std::string& port){
 
       std::string resp = Resp::default_ok("your type is " + parsed_meth, "json");
 
-      Req_lib::Request request = Req_lib::parse_req(buffer);
+      Req_lib::Request request = Req_lib::parse_req(buffer); // makes new one? each time where does it go after?
+
+      if (!routes_["GET"].count(request.url_path)){
+        std::string error = Resp::default_error("Error bro", 404);
+        if (error == "NULL"){
+          std::cerr << "error bro\n";
+          return 1;
+        }
+        send(clientSocket, error.data(), error.length(), 0);
+        close(clientSocket);
+        continue;
+      }
 
       send(clientSocket, resp.data(), resp.length(), 0);
     }else{

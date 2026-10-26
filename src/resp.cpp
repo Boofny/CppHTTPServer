@@ -63,7 +63,26 @@ static std::string create_json_default_resp(const std::string& msg){
   return Json::writeString(w, user);
 }
 
+// another default like ok but with error just a normal hard coded response
+std::string Resp::default_error(std::string_view msg, const int& err_code){
+  std::string resp;
+  std::string return_msg;
+  resp.reserve(128 + msg.size());
 
+  return_msg = create_json_default_resp("Error bro");
+
+  std::string meth_type = "";
+  std::string code_string = std::to_string(err_code);
+
+  resp += "HTTP/1.1 "+ code_string + " Error\r\n"; // also need to handle url paths but will deal with it later
+  resp += "Content-Type: application/problem+json\r\n";
+  resp += "Content-Length: " + std::to_string(return_msg.size()) + "\r\n";
+  resp += "Connection: close\r\n"; 
+  resp += "\r\n";
+  resp += return_msg;
+
+  return resp;
+}
 
 
 
