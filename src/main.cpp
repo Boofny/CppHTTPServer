@@ -24,6 +24,11 @@ int main (int argc, char *argv[]) {
     return Resp::default_ok("bro what", "json");
   });
 
+  router.get("/ping/user", [](const Req_lib::Request& req) {
+    std::cout << req.raw_data << std::endl;
+    return Resp::default_ok("user ping", "json");
+  });
+
   std::uint8_t good = router.StartServer();
   return good;
 

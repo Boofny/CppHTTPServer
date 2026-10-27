@@ -14,9 +14,7 @@
 #include "CppHTTPServer/resp.hpp"
 #include "CppHTTPServer/tools.hpp"
 
-//NOTE: how does the dispatch and get methods link up ?
 void Router::get(const std::string& path, Handler h){
-  // get_routes_[path] = "GET"; // i think so 
   routes_["GET"][path] = std::move(h);
 }
 

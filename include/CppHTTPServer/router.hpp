@@ -19,7 +19,6 @@ class Router{
   private:
     std::string dispatch(const Req_lib::Request& req) const;
     static constexpr int default_port = 8080;
-    std::unordered_map<std::string, std::string> get_routes_; // using this just for now
 
     std::unordered_map<std::string, std::unordered_map <std::string, Handler>> routes_; // thi creates a map of maps best for different methods
 };
