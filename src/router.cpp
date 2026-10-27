@@ -14,12 +14,12 @@
 #include "CppHTTPServer/resp.hpp"
 #include "CppHTTPServer/tools.hpp"
 
+//NOTE: how does the dispatch and get methods link up ?
 void Router::get(const std::string& path, Handler h){
   // get_routes_[path] = "GET"; // i think so 
   routes_["GET"][path] = std::move(h);
 }
 
-// TODO: i under stand the method to the madness here now but will need to work on what is being retured in router.cpp StartServer
 std::string Router::dispatch(const Req_lib::Request& req) const {
   auto m = routes_.find(req.method);
   if (m == routes_.end()) return Resp::default_error("Error broe", 400);
@@ -97,18 +97,22 @@ bool Router::StartServer(const std::string& port){
 
       Req_lib::Request request = Req_lib::parse_req(buffer); // makes new one? each time where does it go after?
 
-      if (!routes_["GET"].count(request.url_path)){
-        std::string error = Resp::default_error("Error bro", 404);
-        if (error == "NULL"){
-          std::cerr << "error bro\n";
-          return 1;
-        }
-        send(clientSocket, error.data(), error.length(), 0);
-        close(clientSocket);
-        continue;
-      }
+      std::string d = dispatch(request);
 
-      send(clientSocket, resp.data(), resp.length(), 0);
+      std::cout << "THE D: " << d << std::endl;
+
+      // if (!routes_["GET"].count(request.url_path)){
+      //   std::string error = Resp::default_error("Error bro", 404);
+      //   if (error == "NULL"){
+      //     std::cerr << "error here\n";
+      //     return 1;
+      //   }
+      //   send(clientSocket, error.data(), error.length(), 0);
+      //   close(clientSocket);
+      //   continue;
+      // }
+
+      send(clientSocket, d.data(), d.length(), 0);
     }else{
       std::cerr << "idk somthing wrong I think\n";
     }

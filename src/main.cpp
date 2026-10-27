@@ -21,7 +21,7 @@ int main (int argc, char *argv[]) {
 
   router.get("/ping", [](const Req_lib::Request& req) {
     std::cout << req.raw_data << std::endl;
-    return Resp::default_ok("ok", "text");
+    return Resp::default_ok("bro what", "json");
   });
 
   std::uint8_t good = router.StartServer();

@@ -11,13 +11,13 @@ class Router{
     Router(bool logging = false);
     void get(const std::string& path, Handler h);
 
-    std::string dispatch(const Req_lib::Request& req) const;
 
     bool StartServer(const std::string& path = "8080");
 
     bool logging_;
 
   private:
+    std::string dispatch(const Req_lib::Request& req) const;
     static constexpr int default_port = 8080;
     std::unordered_map<std::string, std::string> get_routes_; // using this just for now
 
